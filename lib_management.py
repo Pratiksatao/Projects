@@ -9,6 +9,7 @@
 #3.admin table username and password:-
 #   create table admin1(username varchar(50),password varchar(50));
 
+import re
 import mysql.connector
 
 db = mysql.connector.connect(host = "localhost",
@@ -200,7 +201,116 @@ class admin:
                 main()
             else:
                 break
+
+
+
+
+class customer:
+    
+    def check_pword(self,cpword):
+        
+        if len(cpword)<8:
+            return False
+        
+        if not re.search(r'[A-Z]',cpword):
+            return False
+        
+        if not re.search(r'[a-z]',cpword):
+            return False
+        
+        if not re.search(r'\d',cpword):
+            return False
+        
+        if not re.search(r'[!@#$%^&*(),.?":{}|<>]',cpword):
+            return False
+        
+        return True
+        
+        
+    
+    def reg(self):
+        cname=input("Enter Your Name :- ")
+        email = input("Enter Your Email :- ")
+        
+        print(" ")
+        print("Set Password with one uppercase, one lowercase, one number, one special char and at least 8 digit")
+        print(" ")
+        cpword = input("Set Your Password :- ")
+        
+        def set_pword():
+            if self.check_pword(cpword):
+                print("Password Set Successfully")
+                return cpword
+            else:
+                print("Invalid data added set password again")
+        cpword = set_pword()    
+        
+        cnumber = int(input("Enter Your Contact Number :- "))
+        
+        que = "insert into reglogin1(name,email,password,contact)values(%s,%s,%s,%s)"
+        value=(cname,email,cpword,cnumber)
+        cur.execute(que,value)
+        db.commit()
+        
+        print("Registration Successful !!!")
+        
+        self.cdata()
             
+    def Display(self):
+        print("           ID   BOOK NAME          BOOK AUTHOR               PRICE       TYPE")
+        print("------------------------------------------------------------------------------------------")
+        cur.execute("select * from library1")
+        data = cur.fetchall()
+        for row in data:
+            rec=f"{row[0]}{gap}{row[1]:18s}{gap}{row[2]:20s}{gap}{row[3]:<10.2f}{gap}{row[4]:15s}"
+            print(rec.center(100))
+
+    
+    
+    def login(self):
+        print("*******************************************************************************")
+        mail=input("Enter Your Email :- ")
+        password=input("Enter Your Password :- ")
+        
+        
+        que="select * from reglogin1 where password=%s and email=%s"
+        value=(password,mail)
+        cur.execute(que,value)
+        data=cur.fetchone()
+        print(data)
+        if data:
+            print("Login successful Welcome" )
+            self.Display()
+        else:
+            print("invalid username or password try again")
+            self.login()
+            
+            
+
+        
+        
+            
+            
+            
+    def cdata(self):
+        choice = 0
+        while True:
+            print(" ")
+            print("*******************************************************************************")
+            print(" ")
+            print("1.Registration     2.Login    3:EXIT")
+            print(" ")
+            choice=int(input("Enter Your Choice :- "))
+            
+            if(choice==1):
+                self.reg()
+            elif(choice==2):
+                self.login()
+            elif(choice==3):
+                main()
+        
+                
+
 
 def main():
     choice=0
@@ -215,8 +325,8 @@ def main():
             a=admin()
             a.login()
         elif(choice==2):
-            print("Comming Soon 😁")
-            
+            c=customer()
+            c.cdata()  
         elif(choice==3):
             break
         else:

@@ -79,6 +79,7 @@ class admin:
         
         else:
             print("Invalid Username or Password ! Try again")
+            self.login
 
 
     def menu(self):
