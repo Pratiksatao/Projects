@@ -1,5 +1,3 @@
-
-
 #before execute program
 #1. create database demo;
 #2. create table to_do_list(id int primary key auto_incremet,task varchar(100),date date)
