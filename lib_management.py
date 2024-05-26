@@ -281,15 +281,142 @@ class customer:
         if data:
             print("Login successful Welcome" )
             self.Display()
+            self.inlogin()
         else:
             print("invalid username or password try again")
             self.login()
             
+    def inlogin(self):
+        choice=0
+        while True:
+            print(" ")
+            print("*******************************************************************************")
+            print(" ")
+            print("                1.Order Book       2.Go To Cart     3:EXIT")
+            print(" ")
+            choice=int(input("Enter Your Choice :- "))
+            if (choice==1):
+                self.order_book()
+                
+            elif(choice==2):
+                self.cart()
+                
+            elif(choice==3):
+                pass
+            else:
+                print("******************")
+                print("Enter Valid Choice")
+                self.inlogin()
+    
+    
+    
+    
+    def payment(self):
+        self.cart_display()
+        
+        tamount=1200.12
+        print("Total Amount of Your Order is ",tamount," Rs only")
+        choice=0
+        while True:
+            print(" ")
+            print("*******************************************************************************")
+            print(" ")
+            print("                1.Complete Payment          2:Back")
+            print(" ")
+            choice=int(input("Enter Your Choice :- "))
+            if (choice==1):
+                print("Payment Successful !!!!!")
+                
+            elif(choice==2):
+                self.cart()
+        
+    
+    
+    
+    
+    
+    
+    
+    def cart_display(self):
+        print("      BOOK NAME             BOOK AUTHOR             PRICE         EMAIL         QUANTITY")
+        print("-----------------------------------------------------------------------------------------")
+        cur.execute("select * from cart1")
+        data = cur.fetchall()
+        for row in data:
+            rec = f"{row[1]:18s}{gap}{row[2]:20s}{gap}{row[3]:<10.2f}{gap}{row[4]:15s}{gap}{row[5]:<10d}"
+            print(rec.center(100))
             
+            
+            
+            
+    def cart(self):
+        print("                          Books in Cart                      ")
+        self.cart_display()
+        while True:
+            print(" ")
+            print("*******************************************************************************")
+            print(" ")
+            print(" 1.Remove Item From Cart     2.Go To Payment Page    3.Change Quantity   4.EXIT")
+            print(" ")
+            choice=int(input("Enter Your Choice :- "))
+            if (choice==1):
+                pass
+                
+            elif(choice==2):
+                self.payment()
+                
+            elif(choice==3):
+                pass
+            else:
+                print("******************")
+                print("Enter Valid Choice")
+        
+        
+        
+        
+    
+    def order_book(self):
+        self.Display()
+        print("  ")
+        print("Select Your Book From Above ")
+        print("  ")
+        bid = int(input("Enter Book id :- "))
+        bname = input("Enter Name of a Book to Place Order \n      :- ")
+        bqua = int(input("How Many Copies You want to Order \n      :- "))
+        email = input("Enter your email to associate with this order: ")
 
+        que = "select name, author, price from library1 where id = %s and name = %s"
+        Values = (bid,bname)
+        cur.execute(que, Values)
+        data = cur.fetchone()
+
+        if data:
+            que1 = "insert into cart1 (name, author, price, quantity, email) values (%s, %s, %s, %s, %s)"
+            Value1 = (data[0], data[1], data[2], bqua, email)
+            cur.execute(que1, Value1)
+            db.commit()
+            print("Your book has been added to the cart successfully!")
+        else:
+            print("Book not found")
         
+
+        while True:
+            print(" ")
+            print("*******************************************************************************")
+            print(" ")
+            print("        1.Shop More       2.Place Order     3:EXIT")
+            print(" ")
+            choice=int(input("Enter Your Choice :- "))
+            if (choice==1):
+                self.order_book()
+            elif(choice==2):
+                self.cart()
+            elif(choice==3):
+                break
+            else:
+                break
         
-            
+                
             
             
     def cdata(self):
@@ -308,6 +435,10 @@ class customer:
                 self.login()
             elif(choice==3):
                 main()
+            else:
+                print("******************")
+                print("Enter Valid Choice")
+                self.cdata()
         
                 
 
@@ -326,9 +457,10 @@ def main():
             a.login()
         elif(choice==2):
             c=customer()
-            c.cdata()  
+            c.cdata() 
         elif(choice==3):
             break
         else:
             break
+
 main()
