@@ -172,8 +172,15 @@ class admin:
         print("Comming Soon 😁")
         
     def scustomers(self):
-        print("Comming Soon 😁")
-            
+        print("           ID    NAME          EMAIL           PASSWORD           CONTACT")
+        print("------------------------------------------------------------------------------------------")
+        cur.execute("select * from reglogin1")
+        data = cur.fetchall()
+        for row in data:
+            rec = f"{row[1]:18s}{gap}{row[2]:20s}{gap}{(row[3]):<10.2f}{gap}{row[4]:15s}{gap}{row[5]:<10d}"
+            print(rec.center(100))
+        self.adata()
+          
     def adata(self):
         choice = 0
         while True:
